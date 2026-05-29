@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..750;1,400..750&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Lora", Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  --brand: #1D9E75;
+  --brand-d: #0F6E56;
+  --brand-l: #E1F5EE;
+  --brand-m: #9FE1CB;
+  --ap: #E8381A;
+  --ap-l: #FEF0ED;
+  --bg: #FFFFFF;
+  --bg2: #F6F5F1;
+  --bg3: #EEEDEA;
+  --tx: #18181A;
+  --tx2: #5C5B57;
+  --tx3: #9A9994;
+  --bd: rgba(0,0,0,.09);
+  --bd2: rgba(0,0,0,.15);
+  --r: 16px;
+  --rsm: 10px;
+  --rxs: 7px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg3);
+  color: var(--tx);
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #DCDCDC;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: .45;
+    transform: scale(1.3);
+  }
+}
+
+.loc-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes scanline {
+  0% { top: 10px; }
+  50% { top: 148px; }
+  100% { top: 10px; }
+}
+
+.qr-scan-line {
+  animation: scanline 2s ease-in-out infinite;
+}

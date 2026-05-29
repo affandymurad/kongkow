@@ -1,0 +1,6 @@
+{
+  "name": "Kongkow",
+  "description": "Asisten nongkrong dan liburan lokal berbasis lokasi dan mood untuk merencanakan kongkow seru tanpa wacana.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
