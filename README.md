@@ -1,16 +1,16 @@
 <div align="center">
 
 # kongkow.
-### Radar Wisata Lokal Berbasis AI dan AstraPay
+### Radar Wisata Lokal Berbasis AI dan QRIS
 **Anti Wacana. Pro Aksi.**
 
-*Dibuat untuk AstraPay Hackathon 2026*
+*Dibuat untuk QRIS Hackathon 2026*
 
 </div>
 
 ---
 
-Kongkow adalah aplikasi wisata lokal berbasis lokasi dan AI yang mengubah niat jalan-jalan menjadi aksi nyata. Pengguna cukup menjawab empat pertanyaan singkat tentang mood, waktu, radius, dan budget — lalu AI langsung merekomendasikan tiga destinasi kontekstual lengkap dengan pembayaran terintegrasi via AstraPay.
+Kongkow adalah aplikasi wisata lokal berbasis lokasi dan AI yang mengubah niat jalan-jalan menjadi aksi nyata. Pengguna cukup menjawab empat pertanyaan singkat tentang mood, waktu, radius, dan budget — lalu AI langsung merekomendasikan tiga destinasi kontekstual lengkap dengan pembayaran terintegrasi via QRIS.
 
 ## Fitur Utama
 
@@ -20,9 +20,9 @@ Kongkow adalah aplikasi wisata lokal berbasis lokasi dan AI yang mengubah niat j
 
 **Rekomendasi AI via Gemini** memproses input lokasi, mood, preferensi, waktu, radius, dan budget, lalu menghasilkan tiga destinasi nyata yang kontekstual. Setiap destinasi dilengkapi nama tempat, area, jarak tempuh, durasi kunjungan, estimasi harga, deskripsi personal, dan satu tip lokal eksklusif.
 
-**Pembayaran AstraPay Terintegrasi** menyediakan dua jalur: tombol Bayar AstraPay yang membuka deeplink `astrapay://pay` dengan parameter merchant, amount, dan referensi unik, serta tombol Scan QR dengan animasi scanner untuk pembayaran langsung di kasir.
+**Pembayaran QRIS Terintegrasi** menyediakan dua jalur: tombol Bayar QRIS yang membuka deeplink `qris://pay` dengan parameter merchant, amount, dan referensi unik, serta tombol Scan QR dengan animasi scanner untuk pembayaran langsung di kasir.
 
-**Boarding Pass Kongkow** menghasilkan tiket wisata kelompok berformat gambar PNG yang dapat diunduh dan dibagikan langsung ke WhatsApp, Instagram, atau platform lainnya. Tiket berisi detail destinasi, budget, lokasi, dan branding AstraPay, dirancang untuk mendorong ajakan nongkrong yang tidak sekadar wacana.
+**Boarding Pass Kongkow** menghasilkan tiket wisata kelompok berformat gambar PNG yang dapat diunduh dan dibagikan langsung ke WhatsApp, Instagram, atau platform lainnya. Tiket berisi detail destinasi, budget, lokasi, dan branding QRIS, dirancang untuk mendorong ajakan nongkrong yang tidak sekadar wacana.
 
 **Typing Carousel** menampilkan animasi prompt wisata secara bergantian di halaman utama agar pengguna langsung memahami nilai aplikasi sejak detik pertama.
 
@@ -40,7 +40,7 @@ src/
 └── components/
     ├── ShareModal.tsx        # Canvas boarding pass, share WA, download PNG
     ├── TypingCarousel.tsx    # Animasi typewriter prompt wisata
-    └── AstraPayLogo.tsx      # Logo AstraPay SVG untuk canvas rendering
+    └── QRISLogo.tsx          # Logo QRIS SVG untuk canvas rendering
 ```
 
 ## Alur Aplikasi
@@ -61,7 +61,7 @@ Buka App
           │
           ▼
    Halaman Hasil
-   ├─ Tombol Bayar AstraPay (deeplink)
+   ├─ Tombol Bayar QRIS (deeplink)
    ├─ Tombol Scan QR (modal simulator)
    └─ Tombol Bagikan Boarding Pass
           │
@@ -140,4 +140,4 @@ Jika aplikasi dijalankan di dalam iframe (seperti preview AI Studio), izin GPS m
 
 ---
 
-*Kongkow — didukung oleh AstraPay · AstraPay Hackathon 2026*
+*Kongkow — didukung oleh QRIS · QRIS Hackathon 2026*

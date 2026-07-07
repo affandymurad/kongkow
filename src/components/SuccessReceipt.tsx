@@ -26,27 +26,27 @@ export default function SuccessReceipt({
     <div className="flex-1 flex flex-col min-h-0 overflow-hidden bg-white animate-fadeIn">
       <header className="flex-shrink-0 px-4 py-3 flex justify-between items-center border-b border-stone-100 z-10 bg-white">
         <div className="flex flex-col items-start select-none">
-          <span className="text-lg font-black tracking-tight text-[#0F6E56] leading-none">
+          <span className="text-lg md:text-2xl font-black tracking-tight text-[#0F6E56] leading-none">
             kongkow<span className="text-[#1D9E75] font-black">.</span>
           </span>
-          <span className="text-[8px] font-black text-[#1E56B1] tracking-wider uppercase mt-1 leading-none">
-            didukung oleh AstraPay
+          <span className="text-[8px] md:text-[10px] font-black text-[#1E56B1] tracking-wider uppercase mt-1 leading-none">
+            didukung oleh QRIS
           </span>
         </div>
-        <span className="text-[10px] font-bold text-[#5C5B57] font-mono sm:block hidden">
+        <span className="text-[10px] md:text-xs font-bold text-[#5C5B57] font-mono sm:block hidden">
           {currentTime}
         </span>
       </header>
 
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-6 text-center overflow-y-auto">
-        <div className="w-16 h-16 rounded-full bg-[#E1F5EE] flex items-center justify-center text-3xl font-bold text-[#1D9E75] mb-5 animate-bounce">
+        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#E1F5EE] flex items-center justify-center text-3xl md:text-4xl font-bold text-[#1D9E75] mb-5 animate-bounce">
           ✓
         </div>
 
-        <h2 className="text-xl font-bold text-[#18181A] font-sans">
+        <h2 className="text-xl md:text-3xl font-bold text-[#18181A] font-sans">
           Pembayaran Berhasil!
         </h2>
-        <p className="text-xs text-[#5C5B57] leading-relaxed mt-1 font-sans">
+        <p className="text-xs md:text-sm text-[#5C5B57] leading-relaxed mt-1 font-sans">
           Transaksimu sudah resmi tercatat oleh radar.
           <br />
           Selamat menikmati petualangan anti-wacana!
@@ -63,18 +63,18 @@ export default function SuccessReceipt({
             },
             { label: "Metode Dompet", value: receipt.method, className: "text-[#18181A] font-extrabold" },
           ].map(({ label, value, className }) => (
-            <div key={label} className="flex justify-between items-baseline border-b border-stone-250/50 pb-2.5 text-xs">
+            <div key={label} className="flex justify-between items-baseline border-b border-stone-250/50 pb-2.5 text-xs md:text-sm">
               <span className="text-[#9A9994] font-medium">{label}</span>
               <span className={`max-w-[65%] text-right truncate ${className}`}>{value}</span>
             </div>
           ))}
-          <div className="flex justify-between items-baseline border-b border-stone-250/50 pb-2.5 text-xs">
+          <div className="flex justify-between items-baseline border-b border-stone-250/50 pb-2.5 text-xs md:text-sm">
             <span className="text-[#9A9994] font-medium">Ref ID</span>
-            <span className="text-stone-500 font-mono text-[10px] font-bold">{receipt.refId}</span>
+            <span className="text-stone-500 font-mono text-[10px] md:text-xs font-bold">{receipt.refId}</span>
           </div>
-          <div className="flex justify-between items-baseline text-xs">
+          <div className="flex justify-between items-baseline text-xs md:text-sm">
             <span className="text-[#9A9994] font-medium">Tanggal Transaksi</span>
-            <span className="text-stone-500 font-mono text-[10px] font-bold">{receipt.time}</span>
+            <span className="text-stone-500 font-mono text-[10px] md:text-xs font-bold">{receipt.time}</span>
           </div>
         </div>
 
@@ -82,7 +82,7 @@ export default function SuccessReceipt({
           <button
             type="button"
             onClick={onBack}
-            className="w-full py-3.5 bg-stone-100 hover:bg-stone-200 text-[#18181A] border border-stone-300 font-bold rounded-xl text-xs flex items-center justify-center gap-1 cursor-pointer transition uppercase tracking-wider"
+            className="w-full py-3.5 bg-stone-100 hover:bg-stone-200 text-[#18181A] border border-stone-300 font-bold rounded-xl text-xs md:text-sm flex items-center justify-center gap-1 cursor-pointer transition uppercase tracking-wider"
           >
             <ChevronLeft size={14} className="stroke-[2.5]" />
             Kembali ke Hasil
@@ -90,7 +90,7 @@ export default function SuccessReceipt({
           <button
             type="button"
             onClick={onReset}
-            className="w-full py-4 bg-[#1D9E75] hover:bg-[#0F6E56] text-white font-extrabold rounded-xl text-xs flex items-center justify-center gap-1 cursor-pointer transition shadow-xs uppercase tracking-widest"
+            className="w-full py-4 bg-[#1D9E75] hover:bg-[#0F6E56] text-white font-extrabold rounded-xl text-xs md:text-sm flex items-center justify-center gap-1 cursor-pointer transition shadow-xs uppercase tracking-widest"
           >
             Discovery Spot Lain
           </button>

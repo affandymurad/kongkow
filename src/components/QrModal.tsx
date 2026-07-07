@@ -14,8 +14,8 @@ export default function QrModal({ dest, onSimulatePay, onClose }: QrModalProps) 
         <div className="w-9 h-1 bg-stone-300 rounded-full mx-auto mb-5"></div>
 
         <div className="text-center mb-4 space-y-1">
-          <h3 className="text-base font-extrabold text-[#18181A]">Scan QR AstraPay</h3>
-          <p className="text-xs text-[#9A9994]">Arahkan kamera HP ke mesin kasir tenant</p>
+          <h3 className="text-base md:text-lg font-extrabold text-[#18181A]">Scan QRIS</h3>
+          <p className="text-xs md:text-sm text-[#9A9994]">Arahkan kamera HP ke mesin kasir tenant</p>
         </div>
 
         {/* QR Frame */}
@@ -47,10 +47,10 @@ export default function QrModal({ dest, onSimulatePay, onClose }: QrModalProps) 
           </svg>
         </div>
 
-        <div className="text-2xl font-black text-[#18181A] text-center mt-2">
+        <div className="text-2xl md:text-3xl font-black text-[#18181A] text-center mt-2">
           Rp {(dest.price_num || 45000).toLocaleString("id-ID")}
         </div>
-        <div className="text-xs text-[#9A9994] text-center mb-6">
+        <div className="text-xs md:text-sm text-[#9A9994] text-center mb-6">
           Tiket resmi • {dest.name}
         </div>
 
@@ -58,14 +58,14 @@ export default function QrModal({ dest, onSimulatePay, onClose }: QrModalProps) 
           <button
             type="button"
             onClick={onSimulatePay}
-            className="w-full py-4 bg-[#1D9E75] hover:bg-[#0F6E56] text-white font-black text-xs rounded-xl flex items-center justify-center gap-1 cursor-pointer transition active:scale-95 shadow-2xs uppercase tracking-widest"
+            className="w-full py-4 bg-[#1D9E75] hover:bg-[#0F6E56] text-white font-black text-xs md:text-sm rounded-xl flex items-center justify-center gap-1 cursor-pointer transition active:scale-95 shadow-2xs uppercase tracking-widest"
           >
             ✓ Simulasi Bayar Sukses
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="w-full py-3.5 bg-[#F6F5F1] hover:bg-stone-200 border border-stone-300 text-[#5C5B57] font-bold text-xs rounded-xl cursor-pointer transition uppercase"
+            className="w-full py-3.5 bg-[#F6F5F1] hover:bg-stone-200 border border-stone-300 text-[#5C5B57] font-bold text-xs md:text-sm rounded-xl cursor-pointer transition uppercase"
           >
             Batal
           </button>

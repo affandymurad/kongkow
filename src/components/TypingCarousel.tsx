@@ -57,7 +57,7 @@ export default function TypingCarousel() {
   return (
     <div id="typing-prompt-carousel" className="flex items-center gap-2.5 bg-gradient-to-r from-[#FAF9F5] to-[#F5F2EB]/80 border border-[#E6E2D8] rounded-xl px-3.5 py-2 mx-4 mt-3 shadow-3xs select-none">
       <Sparkles className="w-3.5 h-3.5 text-[#1D9E75] shrink-0 animate-pulse" />
-      <div className="text-[11px] text-[#5A5A40] truncate flex-1 flex items-center">
+      <div className="text-[11px] md:text-sm text-[#5A5A40] truncate flex-1 flex items-center">
         <span className="font-bold text-[#107F62] tracking-tight">
           {currentText}
         </span>

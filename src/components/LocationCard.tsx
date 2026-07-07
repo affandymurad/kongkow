@@ -53,7 +53,7 @@ export default function LocationCard({
       >
         <div className="flex items-center gap-2.5 min-w-0 flex-1">
           <div className="w-2.5 h-2.5 rounded-full bg-[#1D9E75] loc-pulse shrink-0"></div>
-          <div className="font-extrabold text-xs text-[#18181A] truncate flex-1">
+          <div className="font-extrabold text-xs md:text-sm text-[#18181A] truncate flex-1">
             {displayedLocName}
           </div>
         </div>
@@ -75,39 +75,39 @@ export default function LocationCard({
           isCollapsed ? "hidden" : "block"
         } mt-2.5 pt-2.5 border-t border-stone-200/40 transition-all duration-300`}
       >
-        <div className="text-[10px] text-[#9A9994] pl-5 mt-0.5 font-medium truncate">
+        <div className="text-[10px] md:text-xs text-[#9A9994] pl-5 mt-0.5 font-medium truncate">
           {displayedLocDetail}
         </div>
 
         {mode === "sk" && locParsed && !gpsLoading && (
-          <div className="mt-3 ml-5 grid grid-cols-2 gap-2 text-[10px] bg-white/70 p-2.5 rounded-xl border border-stone-200/30 font-mono text-[#5C5B57] select-none">
+          <div className="mt-3 ml-5 grid grid-cols-2 gap-2 text-[10px] md:text-xs bg-white/70 p-2.5 rounded-xl border border-stone-200/30 font-mono text-[#5C5B57] select-none">
             {locParsed.jalan && (
               <div className="truncate">
-                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] font-black">Jalan</span>
+                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] md:text-[10px] font-black">Jalan</span>
                 <span className="font-bold text-[#18181A]">{locParsed.jalan}</span>
               </div>
             )}
             {locParsed.kelurahan && (
               <div className="truncate">
-                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] font-black">Kelurahan</span>
+                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] md:text-[10px] font-black">Kelurahan</span>
                 <span className="font-bold text-[#18181A]">{locParsed.kelurahan}</span>
               </div>
             )}
             {locParsed.kecamatan && (
               <div className="truncate">
-                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] font-black">Kecamatan</span>
+                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] md:text-[10px] font-black">Kecamatan</span>
                 <span className="font-bold text-[#18181A]">{locParsed.kecamatan}</span>
               </div>
             )}
             {locParsed.kota && (
               <div className="truncate">
-                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] font-black">Kota/Kab</span>
+                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] md:text-[10px] font-black">Kota/Kab</span>
                 <span className="font-bold text-[#18181A]">{locParsed.kota}</span>
               </div>
             )}
             {locParsed.negara && (
               <div className="truncate">
-                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] font-black">Negara</span>
+                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] md:text-[10px] font-black">Negara</span>
                 <span className="font-bold text-[#18181A]">{locParsed.negara}</span>
               </div>
             )}
@@ -115,14 +115,14 @@ export default function LocationCard({
         )}
 
         {mode === "sk" && gpsError && !gpsLoading && (
-          <div className="mt-3 mx-1 bg-[#FFF2F0] border border-red-200 rounded-xl p-3 text-xs text-red-800">
+          <div className="mt-3 mx-1 bg-[#FFF2F0] border border-red-200 rounded-xl p-3 text-xs md:text-sm text-red-800">
             <div className="font-bold flex items-center gap-1">
               <span>⚠️</span> {gpsError}
             </div>
-            <p className="mt-1 text-[11px] leading-relaxed text-red-700/90">
+            <p className="mt-1 text-[11px] md:text-xs leading-relaxed text-red-700/90">
               Browser memblokir permintaan sensor lokasi saat situs termuat di dalam frame sandboxed (iFrame).
             </p>
-            <div className="mt-2 text-[10px] bg-red-100/50 p-2 rounded-lg text-red-900 leading-normal">
+            <div className="mt-2 text-[10px] md:text-xs bg-red-100/50 p-2 rounded-lg text-red-900 leading-normal">
               <strong>💡 Cara Atasi:</strong> Klik ikon{" "}
               <strong className="underline">"Buka di Tab Baru"</strong> agar
               browser meminta izin GPS secara normal, atau pilih tab{" "}
@@ -135,7 +135,7 @@ export default function LocationCard({
           <button
             type="button"
             onClick={() => onModeChange("sk")}
-            className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+            className={`flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
               mode === "sk"
                 ? "bg-[#E1F5EE] text-[#0F6E56] border border-[#1D9E75]/40"
                 : "bg-white text-[#5C5B57] border border-stone-200 hover:bg-stone-50"
@@ -147,7 +147,7 @@ export default function LocationCard({
           <button
             type="button"
             onClick={() => onModeChange("mn")}
-            className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+            className={`flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
               mode === "mn"
                 ? "bg-[#E1F5EE] text-[#0F6E56] border border-[#1D9E75]/40"
                 : "bg-white text-[#5C5B57] border border-stone-200 hover:bg-stone-50"
@@ -165,11 +165,11 @@ export default function LocationCard({
               value={manualLoc}
               onChange={(e) => onManualLocChange(e.target.value)}
               placeholder="Cth: Dago, Blok M, Jogja, Bandung..."
-              className="flex-1 bg-white border border-stone-200 rounded-lg py-2 px-3 text-xs text-[#18181A] focus:outline-none focus:ring-1 focus:ring-[#1D9E75] font-medium"
+              className="flex-1 bg-white border border-stone-200 rounded-lg py-2 px-3 text-xs md:text-sm text-[#18181A] focus:outline-none focus:ring-1 focus:ring-[#1D9E75] font-medium"
             />
             <button
               type="submit"
-              className="bg-[#1D9E75] hover:bg-[#0F6E56] text-white px-4 py-2 rounded-lg text-xs font-black transition active:scale-95"
+              className="bg-[#1D9E75] hover:bg-[#0F6E56] text-white px-4 py-2 rounded-lg text-xs md:text-sm font-black transition active:scale-95"
             >
               Ganti
             </button>

@@ -3,7 +3,7 @@ import QRCode from "qrcode";
 import { X, Copy, Download, Check, Share2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Destination, UserInput } from "../types";
-import AstraPayLogo from "./AstraPayLogo";
+import QRISLogo from "./QRISLogo";
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -326,10 +326,11 @@ export default function ShareModal({
     // Static url QR code as requested
     const qrUrl = "https://affandymurad.github.io";
 
-    // Real QR Code Generator and AstraPay Logo drawing
-    const logoSize = 42;
-    const logoX = width - 45 - logoSize;
-    const logoY = qrY + 8;
+    // Real QR Code Generator and QRIS Logo drawing
+    const logoHeight = 34;
+    const logoWidth = Math.round(logoHeight * (3000 / 1140));
+    const logoX = width - 45 - logoWidth;
+    const logoY = qrY + 13;
 
     // Draw custom receipt metadata alongside the QR Code
     ctx.fillStyle = "#5A5A40";
@@ -339,7 +340,7 @@ export default function ShareModal({
     ctx.fillText("KONGKOW-OUTING-PLANNER-2026", 135, qrY + 10);
     ctx.font = "italic bold 9px sans-serif";
     ctx.fillText("dibuat oleh Affandy Murad", 135, qrY + 24);
-    ctx.fillText("didukung oleh AstraPay", 135, qrY + 38);
+    ctx.fillText("didukung oleh QRIS", 135, qrY + 38);
 
     QRCode.toDataURL(qrUrl, {
       margin: 1,
@@ -356,14 +357,14 @@ export default function ShareModal({
       };
       img.src = dataUrl;
 
-      // Draw modern vector AstraPay logo from hidden DOM container
+      // Draw modern vector QRIS logo from hidden DOM container
       const logoSvgString = logoContainerRef.current?.innerHTML;
       if (logoSvgString) {
         const svgBlob = new Blob([logoSvgString], { type: "image/svg+xml;charset=utf-8" });
         const logoUrl = URL.createObjectURL(svgBlob);
         const logoImg = new Image();
         logoImg.onload = () => {
-          ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+          ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
           URL.revokeObjectURL(logoUrl);
         };
         logoImg.src = logoUrl;
@@ -426,7 +427,7 @@ export default function ShareModal({
           >
             {/* Left side: Canvas preview */}
             <div className="md:col-span-6 p-6 bg-[#F5F5F0] flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-[#E5E5DF]">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#5A5A40] bg-white border border-[#E5E5DF] px-3.5 py-1.5 rounded-full mb-4 shadow-2xs">
+              <span className="text-xs md:text-sm font-mono font-bold uppercase tracking-wider text-[#5A5A40] bg-white border border-[#E5E5DF] px-3.5 py-1.5 rounded-full mb-4 shadow-2xs">
                 🎟️ Preview Tiket Kelompok
               </span>
 
@@ -443,7 +444,7 @@ export default function ShareModal({
                 <button
                   id="btn-download-ticket"
                   onClick={handleDownload}
-                  className="flex items-center gap-2 justify-center py-2.5 px-4.5 rounded-full text-xs font-bold bg-[#2D2A26] text-white shadow-xs hover:opacity-90 transition cursor-pointer"
+                  className="flex items-center gap-2 justify-center py-2.5 px-4.5 rounded-full text-xs md:text-sm font-bold bg-[#2D2A26] text-white shadow-xs hover:opacity-90 transition cursor-pointer"
                 >
                   <Download size={14} />
                   Simpan Gambar PNG
@@ -451,7 +452,7 @@ export default function ShareModal({
                 <button
                   id="btn-copy-ticket-img"
                   onClick={copyImageToClipboard}
-                  className="flex items-center gap-2 justify-center py-2.5 px-4.5 rounded-full text-xs font-bold bg-[#5A5A40] text-white shadow-xs hover:opacity-90 transition cursor-pointer"
+                  className="flex items-center gap-2 justify-center py-2.5 px-4.5 rounded-full text-xs md:text-sm font-bold bg-[#5A5A40] text-white shadow-xs hover:opacity-90 transition cursor-pointer"
                 >
                   <Share2 size={14} />
                   {copiedImage ? "Tersalin!" : "Salin Gambar"}
@@ -464,10 +465,10 @@ export default function ShareModal({
               <div>
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-2xl font-serif font-bold text-[#2D2A26]">
+                    <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#2D2A26]">
                       Bagikan Ajakan Nongki
                     </h3>
-                    <p className="text-xs text-stone-500 mt-1">
+                    <p className="text-xs md:text-sm text-stone-500 mt-1">
                       Kirim ke grup WhatsApp atau Telegram biar wacana nongki
                       kamu langsung deal!
                     </p>
@@ -483,10 +484,10 @@ export default function ShareModal({
 
                 {/* WhatsApp template text preview area */}
                 <div className="relative mt-6">
-                  <span className="absolute -top-3 left-4 text-[10px] font-bold uppercase tracking-wider bg-white px-2.5 border border-[#E5E5DF] text-[#5A5A40] rounded-full">
+                  <span className="absolute -top-3 left-4 text-[10px] md:text-xs font-bold uppercase tracking-wider bg-white px-2.5 border border-[#E5E5DF] text-[#5A5A40] rounded-full">
                     Template Undangan No-Wacana
                   </span>
-                  <div className="w-full bg-[#F5F5F0] border border-[#E5E5DF] rounded-2xl p-4 pt-6 h-[220px] overflow-y-auto text-xs font-mono text-stone-700 whitespace-pre-wrap leading-relaxed shadow-inner">
+                  <div className="w-full bg-[#F5F5F0] border border-[#E5E5DF] rounded-2xl p-4 pt-6 h-[220px] overflow-y-auto text-xs md:text-sm font-mono text-stone-700 whitespace-pre-wrap leading-relaxed shadow-inner">
                     {getWhatsAppTemplate()}
                   </div>
                 </div>
@@ -496,7 +497,7 @@ export default function ShareModal({
                   <button
                     id="btn-copy-invite-text"
                     onClick={handleCopyText}
-                    className="flex-1 min-w-[110px] flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs font-bold text-white bg-[#5A5A40] hover:opacity-90 transition active:scale-95 shadow-sm cursor-pointer"
+                    className="flex-1 min-w-[110px] flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs md:text-sm font-bold text-white bg-[#5A5A40] hover:opacity-90 transition active:scale-95 shadow-sm cursor-pointer"
                   >
                     {copiedText ? (
                       <>
@@ -514,7 +515,7 @@ export default function ShareModal({
                   <button
                     id="btn-wa-share"
                     onClick={handleWAChating}
-                    className="flex-1 min-w-[110px] flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs font-bold text-white bg-[#25D366] hover:bg-[#20ba5a] transition active:scale-95 shadow-sm cursor-pointer"
+                    className="flex-1 min-w-[110px] flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs md:text-sm font-bold text-white bg-[#25D366] hover:bg-[#20ba5a] transition active:scale-95 shadow-sm cursor-pointer"
                   >
                     <svg className="w-4 h-4 text-white fill-current" viewBox="0 0 24 24">
                       <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.515 2.26 2.268 3.504 5.282 3.502 8.492-.005 6.66-5.341 11.997-11.953 11.997-2.005-.001-3.973-.5-5.741-1.455L0 24zm6.208-3.822l.334.198c1.65.98 3.655 1.498 5.617 1.499h.005c5.623 0 10.198-4.577 10.202-10.202.002-2.724-1.061-5.285-2.993-7.219C17.513 2.52 14.957 1.458 12.235 1.458c-5.614 0-10.187 4.574-10.191 10.197-.001 1.96.51 3.878 1.48 5.514l.217.365-1.04 3.794 3.844-1.008zm11.397-7.402c-.31-.156-1.833-.905-2.115-1.008-.28-.102-.486-.156-.69.156-.202.31-.784 1.008-.962 1.21-.177.203-.355.228-.664.072-1.127-.565-1.889-1.025-2.636-2.316-.197-.339-.197-.549-.071-.741.113-.172.28-.31.42-.465.14-.156.186-.266.28-.445.093-.178.046-.339-.023-.493-.07-.156-.69-1.663-.946-2.28-.25-.601-.504-.52-.69-.53l-.504-.01c-.173 0-.455.064-.693.315-.24.251-.912.89-.912 2.17 0 1.28.932 2.51 1.06 2.685.127.172 1.83 2.793 4.433 3.911.619.266 1.102.425 1.48.545.623.197 1.187.169 1.634.103.498-.073 1.834-.75 2.091-1.439.255-.689.255-1.28.178-1.4-.077-.122-.28-.192-.591-.349z"/>
@@ -525,7 +526,7 @@ export default function ShareModal({
                   <button
                     id="btn-system-share"
                     onClick={handleSystemShare}
-                    className="flex-1 min-w-[110px] flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs font-bold text-white bg-[#0F6E56] hover:bg-[#084A39] transition active:scale-95 shadow-sm cursor-pointer"
+                    className="flex-1 min-w-[110px] flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs md:text-sm font-bold text-white bg-[#0F6E56] hover:bg-[#084A39] transition active:scale-95 shadow-sm cursor-pointer"
                   >
                     <Share2 size={14} />
                     <span>Lainnya</span>
@@ -535,10 +536,10 @@ export default function ShareModal({
 
               {/* Tips for action */}
               <div className="mt-6 bg-[#FAF6EE] border border-[#E5E5DF] rounded-2xl p-4">
-                <h4 className="font-bold text-xs text-[#5A5A40] flex items-center gap-1.5 mb-1.5 font-sans uppercase tracking-wider">
+                <h4 className="font-bold text-xs md:text-sm text-[#5A5A40] flex items-center gap-1.5 mb-1.5 font-sans uppercase tracking-wider">
                   💡 Tips Kongkow Menolak Wacana:
                 </h4>
-                <ul className="text-xs text-stone-600 space-y-1 list-disc list-inside">
+                <ul className="text-xs md:text-sm text-stone-600 space-y-1 list-disc list-inside">
                   <li>Undangan yang detail dengan jam-duration memicu persentase sukses 85% lebih tinggi.</li>
                   <li>Salin teks & posting gambarnya bersamaan di grup keluarga/circle andalan.</li>
                   <li>Langsung tentukan waktu gasken biar ga sekadar jadi wacana abadi!</li>
@@ -546,9 +547,9 @@ export default function ShareModal({
               </div>
             </div>
           </motion.div>
-          {/* Off-screen hidden SVG container for high-fidelity canvas rendering of AstraPayLogo */}
+          {/* Off-screen hidden SVG container for high-fidelity canvas rendering of QRISLogo */}
           <div ref={logoContainerRef} style={{ display: "none", position: "absolute", left: -9999, top: -9999 }}>
-            <AstraPayLogo size={160} />
+            <QRISLogo size={160} />
           </div>
         </div>
       )}

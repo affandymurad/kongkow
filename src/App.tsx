@@ -188,7 +188,7 @@ export default function App() {
   const simulateQrSuccess = () => {
     if (!qrDest) return;
     setShowQrModal(false);
-    showPaidSuccess(qrDest, "QR AstraPay", "QR" + Date.now());
+    showPaidSuccess(qrDest, "QRIS", "QR" + Date.now());
   };
 
   const handleCopyDestName = (text: string, idx: number) => {
@@ -222,22 +222,22 @@ export default function App() {
           <div className="flex-1 flex flex-col min-h-0 overflow-hidden bg-white animate-fadeIn">
             <header className="flex-shrink-0 px-4 py-3 flex justify-between items-center border-b border-stone-100 z-20 bg-white">
               <div className="flex flex-col items-start select-none">
-                <span className="text-lg font-black tracking-tight text-[#0F6E56] leading-none">
+                <span className="text-lg md:text-2xl font-black tracking-tight text-[#0F6E56] leading-none">
                   kongkow<span className="text-[#1D9E75] font-black">.</span>
                 </span>
-                <span className="text-[8px] font-black text-[#1E56B1] tracking-wider uppercase mt-1 leading-none">
-                  didukung oleh AstraPay
+                <span className="text-[8px] md:text-[10px] font-black text-[#1E56B1] tracking-wider uppercase mt-1 leading-none">
+                  didukung oleh QRIS
                 </span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="text-[10px] font-bold text-[#5C5B57] font-mono sm:block hidden">
+                <span className="text-[10px] md:text-xs font-bold text-[#5C5B57] font-mono sm:block hidden">
                   {currentTime}
                 </span>
                 <a
                   href="https://affandymurad.github.io/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[10px] font-extrabold bg-[#E1F5EE] text-[#0F6E56] hover:bg-[#9FE1CB] px-2.5 py-1 rounded-full tracking-wider font-mono cursor-pointer transition active:scale-95 text-center shrink-0"
+                  className="text-[10px] md:text-xs font-extrabold bg-[#E1F5EE] text-[#0F6E56] hover:bg-[#9FE1CB] px-2.5 py-1 rounded-full tracking-wider font-mono cursor-pointer transition active:scale-95 text-center shrink-0"
                 >
                   Affandy Murad
                 </a>

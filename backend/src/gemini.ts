@@ -105,19 +105,39 @@ ATURAN DESTINASI
    Kosongkan (null) jika tidak ada tiket masuk.
 6. payment_methods: SPESIFIK sesuai kenyataan tempat tersebut, jangan pukul rata.
    Contoh benar: "Tunai", "QRIS & Tunai", "Kartu Debit/Kredit, QRIS & Tunai", "GoPay · OVO · QRIS"
-   Contoh salah: "AstraPay · QRIS · Transfer · Kartu" untuk warung kaki lima.
+   Contoh salah: "QRIS · Kartu Debit/Kredit · Transfer Bank" untuk warung kaki lima.
 7. can_pay_digital: true jika menerima QRIS, GoPay, OVO, kartu debit/kredit, transfer. false jika tunai saja.
 8. tip: bocoran info lokal praktis — bukan info umum. Contoh: "parkir di ruko seberang lebih murah".
-9. desc: 2 kalimat, hubungkan mood & preferensi user dengan daya tarik spesifik tempat.`;
+9. desc: 2 kalimat, hubungkan mood & preferensi user dengan daya tarik spesifik tempat.
+
+ATURAN JARAK & RADIUS
+10. Radius yang dipilih user WAJIB dipatuhi ketat, KECUALI radius = "Bebas asal menarik" atau waktu senggang = "Seharian" — pada dua kondisi itu destinasi lebih jauh boleh direkomendasikan selama masih masuk akal (kota/kabupaten yang sama) dan benar-benar layak dikunjungi.
+11. Selain dua pengecualian di atas, taati estimasi waktu tempuh berikut sesuai radius:
+    - "Jalan kaki": maksimal ±15 menit jalan kaki dari titik lokasi.
+    - "5-15 menit": maksimal 15 menit berkendara.
+    - "15-30 menit": maksimal 30 menit berkendara.
+12. Field distance HARUS jujur dan konsisten dengan radius di atas — jangan menulis "10 menit" untuk tempat yang sebenarnya jauh di luar radius.
+
+ATURAN ANTI-HALU UNTUK MERCHANT & STREET FOOD (UMKM)
+13. Untuk venue_type "merchant" dan "street" (warung, kaki lima, UMKM kecil), risiko mengarang nama jauh lebih tinggi dibanding tempat wisata besar yang sudah pasti nyata (museum, mal, taman kota) — jangan sampai menciptakan nama warung/pedagang yang terdengar meyakinkan tapi sebenarnya tidak eksis.
+14. Prioritaskan tempat yang benar-benar dikenal luas: legendaris, viral, sering diliput food vlogger/media, atau punya banyak ulasan di Google Maps — bukan nama generik yang "kedengarannya otentik" (contoh yang DILARANG: "Warung Bu Siti", "Kedai Mas Budi", "Angkringan Pak Joko") tanpa dasar realita.
+15. Kalau kamu TIDAK YAKIN ada satu warung/pedagang spesifik yang benar-benar eksis dengan nama itu di lokasi tersebut, lebih baik sebutkan sentra/kawasan kuliner nyata yang memang ada (contoh: "Kawasan Kuliner Sabang", "Deretan Warung Tenda Jl. Sabang", "Pasar Senggol Braga") ketimbang mengarang nama pedagang individual.
+16. Jangan pernah membuat alamat detail, nomor telepon, atau jam buka yang tidak kamu yakini benar — cukup sebutkan kelurahan/kawasannya saja lewat field area.`;
+
+  const isFreeRadius = batasRadius === "Bebas asal menarik";
+  const isFullDay = rangeWaktu === "Seharian";
+  const distanceRule = isFreeRadius || isFullDay
+    ? `Radius: ${batasRadius} — user memilih ${[isFreeRadius && `radius "Bebas asal menarik"`, isFullDay && `waktu "Seharian"`].filter(Boolean).join(" dan ")}, jadi destinasi boleh lebih jauh dari radius normal selama masih di kota/kabupaten yang sama dan benar-benar layak dikunjungi.`
+    : `Radius: ${batasRadius} — WAJIB dipatuhi ketat, jangan rekomendasikan tempat yang jauh di luar radius ini.`;
 
   const userPrompt = `Rekomendasikan TEPAT 6 tempat di "${userLocation}" dengan kriteria:
 - Mood: [${moodStr}]
 - Preferensi: [${prefStr}]
 - Waktu senggang: ${rangeWaktu}
-- Radius: ${batasRadius}
+- ${distanceRule}
 - Budget: ${rangeBudget}
 
-Pastikan setiap destinasi akurat tipe venue_type-nya dan payment_methods-nya sesuai kondisi nyata tempat itu.`;
+Pastikan setiap destinasi akurat tipe venue_type-nya dan payment_methods-nya sesuai kondisi nyata tempat itu, serta jaraknya konsisten dengan radius di atas.`;
 
   const response = await client.models.generateContent({
     model: "gemini-2.5-flash",
