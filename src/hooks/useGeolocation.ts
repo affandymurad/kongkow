@@ -36,7 +36,7 @@ export function useGeolocation(): GeolocationState {
 
     if (!navigator.geolocation) {
       setGpsLoading(false);
-      setGpsError("Browser kamu tidak mendukung deteksi lokasi otomatis.");
+      setGpsError("Browser ini tidak mendukung deteksi lokasi.");
       return;
     }
 
@@ -57,7 +57,7 @@ export function useGeolocation(): GeolocationState {
               a.neighbourhood ||
               a.city_district ||
               a.city ||
-              "Lokasi kamu";
+              "Lokasimu";
             const full = [a.road, a.suburb, a.city_district, a.city || a.county]
               .filter(Boolean)
               .join(", ");
@@ -76,11 +76,11 @@ export function useGeolocation(): GeolocationState {
               negara: a.country || "Indonesia",
             });
           } else {
-            setGpsError("Gagal menerjemahkan posisi koordinat GPS.");
+            setGpsError("Koordinat tidak bisa diubah jadi alamat.");
           }
         } catch (e) {
           console.warn("Using fallback location.", e);
-          setGpsError("Gagal menterjemahkan koordinat lokasi.");
+          setGpsError("Koordinat tidak bisa diubah jadi alamat.");
         } finally {
           setGpsLoading(false);
         }
@@ -90,14 +90,14 @@ export function useGeolocation(): GeolocationState {
         console.warn("Geolocation error:", err.code, err.message);
         if (err.code === 1) {
           setGpsError(
-            "Akses lokasi diblokir oleh browser / kebijakan keamanan iframe."
+            "Izin lokasi ditolak browser."
           );
         } else if (err.code === 2) {
-          setGpsError("Sinyal GPS tidak terdeteksi atau tidak aktif.");
+          setGpsError("Posisimu tidak terdeteksi.");
         } else if (err.code === 3) {
-          setGpsError("Timeout mencari posisi GPS habis.");
+          setGpsError("Pencarian lokasi terlalu lama.");
         } else {
-          setGpsError("Gagal mendeteksi lokasi otomatis Anda.");
+          setGpsError("Lokasi tidak bisa dideteksi.");
         }
       },
       { timeout: 10000, enableHighAccuracy: true }

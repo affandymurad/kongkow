@@ -4,7 +4,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 
 let aiClient: GoogleGenAI | null = null;
 
-const PLACEHOLDER_KEYS = ["MY_GEMINI_API_KEY", "your_gemini_api_key_here", "YOUR_API_KEY", ""];
+const PLACEHOLDER_KEYS = ["MY_GEMINI_API_KEY", "your_gemini_api_key_here", "YOUR_API_KEY", "isi_di_sini", ""];
 
 export function getGeminiClient(): GoogleGenAI {
   if (!aiClient) {
@@ -86,9 +86,11 @@ export async function getRecommendations(body: RecommendPayload) {
 Tugasmu: memberikan rekomendasi tempat yang personal, kontekstual, dan langsung bisa ditindaklanjuti.
 
 IDENTITAS & TONE
-- Bahasa Indonesia santai, pakai "kamu", boleh selipkan kata: nongki, pewe, mager, adem, hidden gem.
-- Nada seperti teman lokal yang betul-betul tahu daerah itu — bukan guide turis kaku.
-- Hindari frasa pengisi: "Tentunya!", "Tentu saja!", "Dengan senang hati!".
+- Bahasa Indonesia santai tapi jelas, pakai "kamu". Tulis seperti teman yang tahu daerah itu, bukan brosur.
+- Jangan pakai slang berlebihan, hiperbola, atau kata promosi ("wajib coba", "surga", "hidden gem", "ter-mbois", "bestie").
+- Jangan buka dengan basa-basi ("Tentunya!", "Dengan senang hati!"). Langsung ke isi.
+- Kalimat pendek. Sebut hal konkret: menu, suasana, jam ramai, parkir, harga. Hindari kata sifat kosong seperti "seru", "asyik", "estetik".
+- headline: satu kalimat biasa yang menyebut daerahnya, tanpa tanda seru dan tanpa emoji. sub: satu kalimat ringkas tentang kriteria yang dipakai.
 
 ATURAN DESTINASI
 1. Nama tempat HARUS NYATA dan SPESIFIK. Dilarang fiktif.
@@ -150,11 +152,11 @@ Pastikan setiap destinasi akurat tipe venue_type-nya dan payment_methods-nya ses
         properties: {
           headline: {
             type: Type.STRING,
-            description: "Judul catchy ≤6 kata mewakili trip, vibe santai Indonesia.",
+            description: "Satu kalimat biasa yang menyebut daerah dan jenis tempat. Tanpa tanda seru, tanpa emoji.",
           },
           sub: {
             type: Type.STRING,
-            description: "Satu kalimat sub-judul santai yang merangkum kurasi sesuai preferensi user.",
+            description: "Satu kalimat ringkas tentang kriteria yang dipakai (suasana, jarak, budget).",
           },
           destinations: {
             type: Type.ARRAY,

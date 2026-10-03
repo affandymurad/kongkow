@@ -1,5 +1,5 @@
 import React from "react";
-import { MapPin, Compass, ChevronDown, ChevronUp } from "lucide-react";
+import { MapPin, ChevronDown } from "lucide-react";
 import { ParsedAddress } from "../hooks/useGeolocation";
 
 interface LocationCardProps {
@@ -31,151 +31,99 @@ export default function LocationCard({
   onManualLocChange,
   onManualSearch,
 }: LocationCardProps) {
-  const displayedLocName =
+  const title =
     mode === "mn"
-      ? manualLoc.trim() || "Ketik nama lokasi..."
+      ? manualLoc.trim() || "Ketik nama tempat"
       : gpsLoading
-      ? "Mencari sinyal satelit GPS..."
+      ? "Mencari lokasimu…"
       : locName;
 
-  const displayedLocDetail =
-    mode === "mn"
-      ? "Lokasi eksplorasi manual"
-      : gpsLoading
-      ? "Menghubungi satelit penunjuk daerah..."
-      : locDetail;
+  const detail =
+    mode === "mn" ? "Lokasi diisi manual" : gpsLoading ? "Menunggu izin lokasi" : locDetail;
+
+  const parsed: [string, string | undefined][] = [
+    ["Jalan", locParsed?.jalan],
+    ["Kelurahan", locParsed?.kelurahan],
+    ["Kecamatan", locParsed?.kecamatan],
+    ["Kota", locParsed?.kota],
+  ];
+
+  const tab = (active: boolean) =>
+    `flex-1 py-2 px-3 rounded-lg text-sm font-semibold transition cursor-pointer ${
+      active ? "bg-ink text-paper" : "text-muted hover:text-ink"
+    }`;
 
   return (
-    <div className="mx-4 mt-3 bg-[#F6F5F1] rounded-2xl p-4 border border-stone-200/60 shadow-2xs select-none">
-      <div
+    <div className="rounded-xl border border-line bg-card">
+      <button
+        type="button"
         onClick={onToggleCollapse}
-        className="flex items-center justify-between gap-2.5 cursor-pointer"
+        aria-expanded={!isCollapsed}
+        className="w-full flex items-center gap-3 p-4 text-left cursor-pointer"
       >
-        <div className="flex items-center gap-2.5 min-w-0 flex-1">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#1D9E75] loc-pulse shrink-0"></div>
-          <div className="font-extrabold text-xs md:text-sm text-[#18181A] truncate flex-1">
-            {displayedLocName}
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleCollapse();
-          }}
-          className="p-1 hover:bg-stone-200/50 rounded-lg text-stone-500 hover:text-stone-700 transition cursor-pointer flex items-center justify-center shrink-0"
-          aria-label="Toggle detail lokasi"
-        >
-          {isCollapsed ? <ChevronDown size={15} /> : <ChevronUp size={15} />}
-        </button>
-      </div>
+        <MapPin size={18} className="text-accent shrink-0" />
+        <span className="min-w-0 flex-1">
+          <span className="block text-xs text-muted">Lokasi</span>
+          <span className="block font-semibold text-ink truncate">{title}</span>
+        </span>
+        <ChevronDown
+          size={18}
+          className={`text-muted shrink-0 transition-transform ${isCollapsed ? "" : "rotate-180"}`}
+        />
+      </button>
 
-      <div
-        className={`${
-          isCollapsed ? "hidden" : "block"
-        } mt-2.5 pt-2.5 border-t border-stone-200/40 transition-all duration-300`}
-      >
-        <div className="text-[10px] md:text-xs text-[#9A9994] pl-5 mt-0.5 font-medium truncate">
-          {displayedLocDetail}
-        </div>
+      {!isCollapsed && (
+        <div className="px-4 pb-4 pt-1 border-t border-line">
+          <p className="text-sm text-muted mt-3">{detail}</p>
 
-        {mode === "sk" && locParsed && !gpsLoading && (
-          <div className="mt-3 ml-5 grid grid-cols-2 gap-2 text-[10px] md:text-xs bg-white/70 p-2.5 rounded-xl border border-stone-200/30 font-mono text-[#5C5B57] select-none">
-            {locParsed.jalan && (
-              <div className="truncate">
-                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] md:text-[10px] font-black">Jalan</span>
-                <span className="font-bold text-[#18181A]">{locParsed.jalan}</span>
-              </div>
-            )}
-            {locParsed.kelurahan && (
-              <div className="truncate">
-                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] md:text-[10px] font-black">Kelurahan</span>
-                <span className="font-bold text-[#18181A]">{locParsed.kelurahan}</span>
-              </div>
-            )}
-            {locParsed.kecamatan && (
-              <div className="truncate">
-                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] md:text-[10px] font-black">Kecamatan</span>
-                <span className="font-bold text-[#18181A]">{locParsed.kecamatan}</span>
-              </div>
-            )}
-            {locParsed.kota && (
-              <div className="truncate">
-                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] md:text-[10px] font-black">Kota/Kab</span>
-                <span className="font-bold text-[#18181A]">{locParsed.kota}</span>
-              </div>
-            )}
-            {locParsed.negara && (
-              <div className="truncate">
-                <span className="text-[#107F62] block uppercase tracking-wider text-[8px] md:text-[10px] font-black">Negara</span>
-                <span className="font-bold text-[#18181A]">{locParsed.negara}</span>
-              </div>
-            )}
-          </div>
-        )}
+          {mode === "sk" && locParsed && !gpsLoading && !gpsError && (
+            <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+              {parsed.map(([label, value]) =>
+                value ? (
+                  <div key={label} className="min-w-0">
+                    <dt className="text-xs text-muted">{label}</dt>
+                    <dd className="font-medium text-ink truncate">{value}</dd>
+                  </div>
+                ) : null
+              )}
+            </dl>
+          )}
 
-        {mode === "sk" && gpsError && !gpsLoading && (
-          <div className="mt-3 mx-1 bg-[#FFF2F0] border border-red-200 rounded-xl p-3 text-xs md:text-sm text-red-800">
-            <div className="font-bold flex items-center gap-1">
-              <span>⚠️</span> {gpsError}
-            </div>
-            <p className="mt-1 text-[11px] md:text-xs leading-relaxed text-red-700/90">
-              Browser memblokir permintaan sensor lokasi saat situs termuat di dalam frame sandboxed (iFrame).
+          {mode === "sk" && gpsError && !gpsLoading && (
+            <p className="mt-3 rounded-lg bg-warn-soft px-3 py-2.5 text-sm text-accent-dark">
+              {gpsError} Pilih “Tempat lain” untuk mengetik lokasi sendiri.
             </p>
-            <div className="mt-2 text-[10px] md:text-xs bg-red-100/50 p-2 rounded-lg text-red-900 leading-normal">
-              <strong>💡 Cara Atasi:</strong> Klik ikon{" "}
-              <strong className="underline">"Buka di Tab Baru"</strong> agar
-              browser meminta izin GPS secara normal, atau pilih tab{" "}
-              <strong>"Tempat Lain"</strong> untuk menulis manual.
-            </div>
-          </div>
-        )}
+          )}
 
-        <div className="flex gap-2 mt-4">
-          <button
-            type="button"
-            onClick={() => onModeChange("sk")}
-            className={`flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
-              mode === "sk"
-                ? "bg-[#E1F5EE] text-[#0F6E56] border border-[#1D9E75]/40"
-                : "bg-white text-[#5C5B57] border border-stone-200 hover:bg-stone-50"
-            }`}
-          >
-            <MapPin size={13} className={mode === "sk" ? "text-[#1D9E75]" : "text-stone-400"} />
-            Sekitar Sini
-          </button>
-          <button
-            type="button"
-            onClick={() => onModeChange("mn")}
-            className={`flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
-              mode === "mn"
-                ? "bg-[#E1F5EE] text-[#0F6E56] border border-[#1D9E75]/40"
-                : "bg-white text-[#5C5B57] border border-stone-200 hover:bg-stone-50"
-            }`}
-          >
-            <Compass size={13} className={mode === "mn" ? "text-[#1D9E75]" : "text-stone-400"} />
-            Tempat Lain
-          </button>
-        </div>
-
-        {mode === "mn" && (
-          <form onSubmit={onManualSearch} className="mt-3 flex gap-1.5">
-            <input
-              type="text"
-              value={manualLoc}
-              onChange={(e) => onManualLocChange(e.target.value)}
-              placeholder="Cth: Dago, Blok M, Jogja, Bandung..."
-              className="flex-1 bg-white border border-stone-200 rounded-lg py-2 px-3 text-xs md:text-sm text-[#18181A] focus:outline-none focus:ring-1 focus:ring-[#1D9E75] font-medium"
-            />
-            <button
-              type="submit"
-              className="bg-[#1D9E75] hover:bg-[#0F6E56] text-white px-4 py-2 rounded-lg text-xs md:text-sm font-black transition active:scale-95"
-            >
-              Ganti
+          <div className="mt-4 flex gap-1 rounded-xl bg-paper p-1">
+            <button type="button" onClick={() => onModeChange("sk")} className={tab(mode === "sk")}>
+              Sekitar sini
             </button>
-          </form>
-        )}
-      </div>
+            <button type="button" onClick={() => onModeChange("mn")} className={tab(mode === "mn")}>
+              Tempat lain
+            </button>
+          </div>
+
+          {mode === "mn" && (
+            <form onSubmit={onManualSearch} className="mt-3 flex gap-2">
+              <input
+                type="text"
+                value={manualLoc}
+                onChange={(e) => onManualLocChange(e.target.value)}
+                placeholder="Dago, Blok M, Prawirotaman…"
+                aria-label="Nama lokasi"
+                className="flex-1 min-w-0 rounded-lg border border-line bg-paper px-3 py-2.5 text-sm placeholder:text-muted/70 focus:outline-none focus:border-accent"
+              />
+              <button
+                type="submit"
+                className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white hover:bg-accent-dark transition cursor-pointer"
+              >
+                Pakai
+              </button>
+            </form>
+          )}
+        </div>
+      )}
     </div>
   );
 }

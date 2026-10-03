@@ -1,77 +1,55 @@
 import React, { useState, useEffect } from "react";
 import { UserInput, Destination } from "./types";
-import { CATS, HUMOROUS_LOADER_TEXTS } from "./constants";
-
-import { useClock } from "./hooks/useClock";
+import { CATS, LOADER_TEXTS } from "./constants";
 import { useGeolocation } from "./hooks/useGeolocation";
 
+import Header from "./components/Header";
 import LocationCard from "./components/LocationCard";
 import StepWizard from "./components/StepWizard";
 import LoadingScreen from "./components/LoadingScreen";
 import ResultsScreen from "./components/ResultsScreen";
-import SuccessReceipt from "./components/SuccessReceipt";
-import QrModal from "./components/QrModal";
 import ShareModal from "./components/ShareModal";
-import TypingCarousel from "./components/TypingCarousel";
 
-type Screen = "onboarding" | "loading" | "results" | "success_receipt";
+type Screen = "onboarding" | "loading" | "results";
 
-interface Receipt {
-  destName: string;
-  amount: number;
-  method: string;
-  refId: string;
-  time: string;
-}
+const DEFAULT_WAKTU = "1-2 jam";
+const DEFAULT_RADIUS = "15-30 menit";
+const DEFAULT_BUDGET = "Standar";
 
 export default function App() {
-  // ─── Screen ───────────────────────────────────────────────────
   const [screen, setScreen] = useState<Screen>("onboarding");
-
-  // ─── Hooks ────────────────────────────────────────────────────
-  const currentTime = useClock();
   const geo = useGeolocation();
 
-  // ─── Location UI state ────────────────────────────────────────
   const [mode, setMode] = useState<"sk" | "mn">("sk");
   const [isLocCollapsed, setIsLocCollapsed] = useState(true);
   const [manualLoc, setManualLoc] = useState("");
 
-  // ─── Step wizard state ────────────────────────────────────────
   const [step, setStep] = useState(0);
   const [selCats, setSelCats] = useState<number[]>([]);
   const [selSubs, setSelSubs] = useState<Record<string, number[]>>({});
-  const [selWaktu, setSelWaktu] = useState("1-2 jam");
-  const [selRadius, setSelRadius] = useState("15-30 menit");
-  const [selBudget, setSelBudget] = useState("Standar");
+  const [selWaktu, setSelWaktu] = useState(DEFAULT_WAKTU);
+  const [selRadius, setSelRadius] = useState(DEFAULT_RADIUS);
+  const [selBudget, setSelBudget] = useState(DEFAULT_BUDGET);
 
-  // ─── Results state ────────────────────────────────────────────
   const [dests, setDests] = useState<Destination[]>([]);
-  const [headline, setHeadline] = useState("Rekomendasi untuk kamu");
-  const [subHeadline, setSubHeadline] = useState("Di sekitar lokasimu");
+  const [headline, setHeadline] = useState("");
+  const [subHeadline, setSubHeadline] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  // ─── Payment / modal state ────────────────────────────────────
-  const [showQrModal, setShowQrModal] = useState(false);
-  const [qrDest, setQrDest] = useState<Destination | null>(null);
-  const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [copiedTextIdx, setCopiedTextIdx] = useState<number | null>(null);
 
-  // ─── Loader text cycling ──────────────────────────────────────
   const [loaderIndex, setLoaderIndex] = useState(0);
   useEffect(() => {
     if (screen !== "loading") { setLoaderIndex(0); return; }
     const iv = setInterval(() => {
-      setLoaderIndex((p) => (p + 1) % HUMOROUS_LOADER_TEXTS.length);
-    }, 2500);
+      setLoaderIndex((p) => (p + 1) % LOADER_TEXTS.length);
+    }, 3000);
     return () => clearInterval(iv);
   }, [screen]);
 
-  // Auto-detect GPS on mount
   useEffect(() => { geo.detectLocation(); }, []);
 
-  // ─── Handlers ─────────────────────────────────────────────────
   const handleModeChange = (m: "sk" | "mn") => {
     setMode(m);
     if (m === "sk") geo.detectLocation();
@@ -81,7 +59,7 @@ export default function App() {
     e.preventDefault();
     if (manualLoc.trim()) {
       geo.setLocName(manualLoc.trim());
-      geo.setLocDetail("Lokasi diatur manual");
+      geo.setLocDetail("Lokasi diisi manual");
     }
   };
 
@@ -108,20 +86,20 @@ export default function App() {
     else callRadarAI();
   };
 
-  const handleBack = () => setStep((s) => Math.max(0, s - 1));
-
   const resetAll = () => {
     setStep(0);
     setSelCats([]);
     setSelSubs({});
-    setSelWaktu("1-2 jam");
-    setSelRadius("15-30 menit");
-    setSelBudget("Standar");
+    setSelWaktu(DEFAULT_WAKTU);
+    setSelRadius(DEFAULT_RADIUS);
+    setSelBudget(DEFAULT_BUDGET);
     setDests([]);
-    setScreen("onboarding");
     setError(null);
-    setQrDest(null);
+    setScreen("onboarding");
   };
+
+  const activeLocation =
+    mode === "mn" && manualLoc.trim() ? manualLoc.trim() : geo.locName;
 
   const buildPayload = (): UserInput => {
     const moodPayload = selCats.map((idx) => CATS[idx].label);
@@ -132,10 +110,8 @@ export default function App() {
         if (CATS[ci]?.subs[si]) prefPayload.push(CATS[ci].subs[si].chips[chi]);
       });
     });
-    const activeLoc =
-      mode === "mn" && manualLoc.trim() ? manualLoc.trim() : geo.locName;
     return {
-      lokasi: activeLoc,
+      lokasi: activeLocation,
       mood: moodPayload.length > 0 ? moodPayload : ["Lapar / haus"],
       preferensi: prefPayload.length > 0 ? prefPayload : ["Warung lokal autentik"],
       waktu: selWaktu,
@@ -156,39 +132,16 @@ export default function App() {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
-      // Backend mengembalikan error terstruktur jika Gemini gagal
       if (!res.ok || data.error) {
-        throw new Error(data.message || "Gagal menghubungi AI. Coba beberapa saat lagi.");
+        throw new Error(data.message || "Rekomendasi belum bisa dimuat. Coba lagi sebentar.");
       }
       setDests(data.destinations || []);
-      setHeadline(data.headline || "6 Rekomendasi buat Kamu");
+      setHeadline(data.headline || "Rekomendasi untuk kamu");
       setSubHeadline(data.sub || `Di sekitar ${payload.lokasi}`);
-      setScreen("results");
     } catch (err: any) {
-      setError(err?.message || "Koneksi terganggu. Ayo gaskeun radar ulang!");
-      setScreen("results");
+      setError(err?.message || "Koneksi terputus. Coba lagi.");
     }
-  };
-
-  const showPaidSuccess = (dest: Destination, method: string, ref: string) => {
-    const now = new Date();
-    setReceipt({
-      destName: dest.name,
-      amount: dest.price_num || 45000,
-      method,
-      refId: ref,
-      time: now.toLocaleDateString("id-ID", {
-        day: "2-digit", month: "short", year: "numeric",
-        hour: "2-digit", minute: "2-digit",
-      }),
-    });
-    setScreen("success_receipt");
-  };
-
-  const simulateQrSuccess = () => {
-    if (!qrDest) return;
-    setShowQrModal(false);
-    showPaidSuccess(qrDest, "QRIS", "QR" + Date.now());
+    setScreen("results");
   };
 
   const handleCopyDestName = (text: string, idx: number) => {
@@ -197,12 +150,9 @@ export default function App() {
     setTimeout(() => setCopiedTextIdx(null), 2000);
   };
 
-  // ─── Derived activeInput for ShareModal ───────────────────────
   const activeInput: UserInput = {
-    lokasi: mode === "mn" && manualLoc.trim() ? manualLoc.trim() : geo.locName,
-    mood: selCats.map((idx) => CATS[idx].label).length > 0
-      ? selCats.map((idx) => CATS[idx].label)
-      : ["Wisata Santai"],
+    lokasi: activeLocation,
+    mood: selCats.length > 0 ? selCats.map((idx) => CATS[idx].label) : ["Santai"],
     preferensi: [],
     waktu: selWaktu,
     radius: selRadius,
@@ -210,128 +160,77 @@ export default function App() {
     lokasi_detail: mode === "sk" ? geo.locDetail : undefined,
   };
 
-  // ─── Render ───────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-[#EEEDEA] flex justify-center items-center antialiased selection:bg-[#E1F5EE] selection:text-[#0F6E56] p-0 md:p-6">
-      <div
-        id="app"
-        className="w-full max-w-[430px] md:max-w-[680px] lg:max-w-[840px] h-[100dvh] md:h-[92dvh] md:max-h-[840px] bg-white flex flex-col overflow-hidden relative shadow-2xl md:rounded-3xl transition-all duration-300"
-      >
-        {/* ── ONBOARDING ── */}
-        {screen === "onboarding" && (
-          <div className="flex-1 flex flex-col min-h-0 overflow-hidden bg-white animate-fadeIn">
-            <header className="flex-shrink-0 px-4 py-3 flex justify-between items-center border-b border-stone-100 z-20 bg-white">
-              <div className="flex flex-col items-start select-none">
-                <span className="text-lg md:text-2xl font-black tracking-tight text-[#0F6E56] leading-none">
-                  kongkow<span className="text-[#1D9E75] font-black">.</span>
-                </span>
-                <span className="text-[8px] md:text-[10px] font-black text-[#1E56B1] tracking-wider uppercase mt-1 leading-none">
-                  didukung oleh QRIS
-                </span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <span className="text-[10px] md:text-xs font-bold text-[#5C5B57] font-mono sm:block hidden">
-                  {currentTime}
-                </span>
-                <a
-                  href="https://affandymurad.github.io/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[10px] md:text-xs font-extrabold bg-[#E1F5EE] text-[#0F6E56] hover:bg-[#9FE1CB] px-2.5 py-1 rounded-full tracking-wider font-mono cursor-pointer transition active:scale-95 text-center shrink-0"
-                >
-                  Affandy Murad
-                </a>
-              </div>
-            </header>
+    <div className="min-h-[100dvh] bg-paper">
+      {screen === "onboarding" && (
+        <div className="mx-auto max-w-2xl px-5 pb-32 animate-fadeIn">
+          <Header />
 
-            <TypingCarousel />
+          <section className="pt-4 pb-6">
+            <h1 className="font-display text-4xl md:text-5xl font-semibold leading-[1.08] tracking-tight text-ink">
+              Mau nongkrong<br />di mana hari ini?
+            </h1>
+            <p className="mt-4 max-w-md text-base leading-relaxed text-muted">
+              Jawab empat pertanyaan singkat. Kamu dapat enam tempat nyata di
+              sekitarmu, lengkap dengan jarak dan cara bayarnya.
+            </p>
+          </section>
 
-            <LocationCard
-              mode={mode}
-              locName={geo.locName}
-              locDetail={geo.locDetail}
-              gpsLoading={geo.gpsLoading}
-              gpsError={geo.gpsError}
-              locParsed={geo.locParsed}
-              manualLoc={manualLoc}
-              isCollapsed={isLocCollapsed}
-              onToggleCollapse={() => setIsLocCollapsed((c) => !c)}
-              onModeChange={handleModeChange}
-              onManualLocChange={setManualLoc}
-              onManualSearch={handleManualSearch}
-            />
-
-            <StepWizard
-              step={step}
-              selCats={selCats}
-              selSubs={selSubs}
-              selWaktu={selWaktu}
-              selRadius={selRadius}
-              selBudget={selBudget}
-              onToggleCat={toggleCategory}
-              onToggleSub={toggleSubChip}
-              onSelWaktu={setSelWaktu}
-              onSelRadius={setSelRadius}
-              onSelBudget={setSelBudget}
-              onNext={handleNext}
-              onBack={handleBack}
-            />
-          </div>
-        )}
-
-        {/* ── LOADING ── */}
-        {screen === "loading" && (
-          <LoadingScreen
-            currentTime={currentTime}
-            loaderText={HUMOROUS_LOADER_TEXTS[loaderIndex]}
-          />
-        )}
-
-        {/* ── RESULTS ── */}
-        {screen === "results" && (
-          <ResultsScreen
-            headline={headline}
-            subHeadline={subHeadline}
-            dests={dests}
-            error={error}
-            currentTime={currentTime}
+          <LocationCard
+            mode={mode}
             locName={geo.locName}
-            copiedTextIdx={copiedTextIdx}
-            onCopy={handleCopyDestName}
-            onRetry={callRadarAI}
-            onReset={resetAll}
-            onShare={() => setIsShareModalOpen(true)}
+            locDetail={geo.locDetail}
+            gpsLoading={geo.gpsLoading}
+            gpsError={geo.gpsError}
+            locParsed={geo.locParsed}
+            manualLoc={manualLoc}
+            isCollapsed={isLocCollapsed}
+            onToggleCollapse={() => setIsLocCollapsed((c) => !c)}
+            onModeChange={handleModeChange}
+            onManualLocChange={setManualLoc}
+            onManualSearch={handleManualSearch}
           />
-        )}
 
-        {/* ── SUCCESS RECEIPT ── */}
-        {screen === "success_receipt" && receipt && (
-          <SuccessReceipt
-            receipt={receipt}
-            currentTime={currentTime}
-            onBack={() => setScreen("results")}
-            onReset={resetAll}
+          <StepWizard
+            step={step}
+            selCats={selCats}
+            selSubs={selSubs}
+            selWaktu={selWaktu}
+            selRadius={selRadius}
+            selBudget={selBudget}
+            onToggleCat={toggleCategory}
+            onToggleSub={toggleSubChip}
+            onSelWaktu={setSelWaktu}
+            onSelRadius={setSelRadius}
+            onSelBudget={setSelBudget}
+            onNext={handleNext}
+            onBack={() => setStep((s) => Math.max(0, s - 1))}
           />
-        )}
+        </div>
+      )}
 
-        {/* ── QR MODAL ── */}
-        {showQrModal && qrDest && (
-          <QrModal
-            dest={qrDest}
-            onSimulatePay={simulateQrSuccess}
-            onClose={() => setShowQrModal(false)}
-          />
-        )}
-      </div>
+      {screen === "loading" && <LoadingScreen loaderText={LOADER_TEXTS[loaderIndex]} />}
 
-      {/* ── SHARE MODAL ── */}
+      {screen === "results" && (
+        <ResultsScreen
+          headline={headline}
+          subHeadline={subHeadline}
+          dests={dests}
+          error={error}
+          locName={activeLocation}
+          copiedTextIdx={copiedTextIdx}
+          onCopy={handleCopyDestName}
+          onRetry={callRadarAI}
+          onReset={resetAll}
+          onShare={() => setIsShareModalOpen(true)}
+        />
+      )}
+
       {isShareModalOpen && dests.length > 0 && (
         <ShareModal
           isOpen={isShareModalOpen}
           onClose={() => setIsShareModalOpen(false)}
           userInput={activeInput}
-          headline={headline}
-          sub={subHeadline}
           destinations={dests}
         />
       )}

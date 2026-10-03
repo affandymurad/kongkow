@@ -1,5 +1,4 @@
 export interface Category {
-  emoji: string;
   label: string;
   desc: string;
   subs: {
@@ -10,9 +9,8 @@ export interface Category {
 
 export const CATS: Category[] = [
   {
-    emoji: "🍜",
     label: "Lapar / haus",
-    desc: "Cari makan atau minuman",
+    desc: "Makan berat, jajan, minuman",
     subs: [
       {
         label: "makan apa",
@@ -25,9 +23,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "📸",
     label: "Konten / foto",
-    desc: "Cari spot & estetika",
+    desc: "Spot foto dan video",
     subs: [
       {
         label: "jenis konten",
@@ -40,9 +37,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "🛋️",
     label: "Santai / rebahan",
-    desc: "Gak mau gerak banyak",
+    desc: "Duduk lama, tidak banyak gerak",
     subs: [
       {
         label: "cara santai",
@@ -55,9 +51,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "🌿",
     label: "Alam & udara segar",
-    desc: "Keluar dari beton kota",
+    desc: "Taman, bukit, pantai, sawah",
     subs: [
       {
         label: "jenis alam",
@@ -70,9 +65,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "🛍️",
     label: "Belanja / jajan",
-    desc: "Refreshing lewat dompet",
+    desc: "Oleh-oleh, thrift, jajan",
     subs: [
       {
         label: "mau beli apa",
@@ -85,9 +79,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "🎭",
     label: "Budaya & sejarah",
-    desc: "Nambah wawasan sambil jalan",
+    desc: "Museum, situs, pasar tradisional",
     subs: [
       {
         label: "destinasi",
@@ -96,9 +89,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "👨‍👩‍👧",
     label: "Bawa anak / keluarga",
-    desc: "Aman & seru buat semua",
+    desc: "Ramah anak, fasilitas lengkap",
     subs: [
       {
         label: "usia anak",
@@ -111,9 +103,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "💑",
     label: "Kencan / couple",
-    desc: "Quality time berdua",
+    desc: "Berdua, dari santai sampai spesial",
     subs: [
       {
         label: "jenis kencan",
@@ -126,9 +117,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "🎮",
     label: "Aktivitas & main",
-    desc: "Gerak atau challenge",
+    desc: "Olahraga ringan sampai escape room",
     subs: [
       {
         label: "jenis aktivitas",
@@ -141,9 +131,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "🌙",
     label: "Malam hari",
-    desc: "Setelah jam 6 sore",
+    desc: "Setelah jam enam sore",
     subs: [
       {
         label: "vibes malam",
@@ -152,9 +141,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "😮‍💨",
     label: "Healing",
-    desc: "Butuh me-time serius",
+    desc: "Menyendiri dan menenangkan diri",
     subs: [
       {
         label: "jenis healing",
@@ -163,9 +151,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "🏃",
     label: "Spontan & nekat",
-    desc: "Gak mau yang biasa-biasa",
+    desc: "Tempat yang jarang didatangi",
     subs: [
       {
         label: "level nekat",
@@ -174,9 +161,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "☕",
     label: "Kerja / belajar",
-    desc: "Produktif di luar rumah",
+    desc: "WiFi, colokan, boleh duduk lama",
     subs: [
       {
         label: "kebutuhan",
@@ -185,9 +171,8 @@ export const CATS: Category[] = [
     ]
   },
   {
-    emoji: "🤷",
-    label: "Surprise me!",
-    desc: "Biar AI yang pilih",
+    label: "Terserah",
+    desc: "Serahkan pilihan ke Kongkow",
     subs: [
       {
         label: "satu-satunya syarat",
@@ -198,43 +183,21 @@ export const CATS: Category[] = [
 ];
 
 export const OTHER_STEPS = [
-  { tag: "waktu tersedia", q: "Punya waktu berapa lama?", chips: ["< 1 jam", "1-2 jam", "Setengah hari", "Seharian"] },
-  { tag: "radius eksplorasi", q: "Mau eksplor sejauh apa?", chips: ["Jalan kaki", "5-15 menit", "15-30 menit", "Bebas asal menarik"] },
-  { tag: "budget", q: "Budget kamu hari ini?", chips: ["Hemat banget", "Standar", "Premium"] }
+  { q: "Punya waktu berapa lama?", chips: ["Kurang dari 1 jam", "1-2 jam", "Setengah hari", "Seharian"] },
+  { q: "Mau pergi sejauh apa?", chips: ["Jalan kaki", "5-15 menit", "15-30 menit", "Bebas asal menarik"] },
+  { q: "Budget hari ini?", chips: ["Hemat banget", "Standar", "Premium"] }
 ];
 
-export const NEXT_LABELS = [
-  "Gas! 🗺️",
-  "Hampir nih! ⚡",
-  "Dikit lagi! 🔥",
-  "Cari sekarang! 🚀"
-];
+export const STEP_LABELS = ["Suasana", "Waktu", "Jarak", "Budget"];
 
-export const HUMOROUS_LOADER_TEXTS = [
-  "Mencari hidden gem terdekat... 🔍",
-  "Fakta QRIS: lahir dari permainan kata \"keris\", senjata tradisional Indonesia. 🗡️",
-  "Sabar ya, lagi nanya Jin penunggu daerah setempat... 👻",
-  "Fakta QRIS: resmi diluncurkan 17 Agustus 2019, bertepatan dengan HUT Kemerdekaan RI ke-74. 🎉",
-  "Mencari tempat sembunyi ter-mbois dari kejaran wacana... 💻",
-  "Fakta QRIS: sebelum ada QRIS, satu toko bisa punya banyak kode QR berbeda dari tiap aplikasi pembayaran. 📱",
-  "Membandingkan harga es teh manis dan cilok kelurahan setempat... 🍹",
-  "Fakta QRIS: semua penyelenggara jasa pembayaran wajib menerapkan QRIS sejak 1 Januari 2020. 📅",
-  "Mengukur kemacetan aspal gang buat rute ojol tercepat... 🛵",
-  "Fakta QRIS: bisa dipakai lintas aplikasi seperti GoPay, OVO, DANA, ShopeePay, hingga m-banking. 💳",
-  "Chatting bentar ama bestie lokal penunggu ruko seberang... 🛋️",
-  "Fakta QRIS: selain scan kamera, ada juga versi tap NFC bernama \"QRIS Tap\". 📲",
-  "Fakta QRIS: pengguna melonjak dari 1,6 juta orang di 2019 jadi puluhan juta orang dalam enam tahun. 📈",
-  "Fakta QRIS: sekitar 95% merchant QRIS berasal dari usaha mikro alias pedagang kecil. 🏪",
-  "Fakta QRIS: total transaksi QRIS di 2024 tembus Rp42 triliun. 💰",
-  "Fakta QRIS: batas maksimal satu transaksi adalah Rp10 juta, berlaku sejak Maret 2022. 🔒",
-  "Fakta QRIS: sejak Maret 2025, merchant layanan publik (BLU/PSO) dikenai biaya MDR 0%. 🏛️",
-  "Fakta QRIS: belanja sehari-hari pakai QRIS tidak kena PPN 12%. 🧾",
-  "Fakta QRIS: Thailand jadi negara pertama yang terhubung penuh lintas negara sejak 2022. 🇹🇭",
-  "Fakta QRIS: sudah bisa dipakai di Thailand, Malaysia, Singapura, Jepang, Korea Selatan, dan Tiongkok. 🌏",
-  "Fakta QRIS: resmi terhubung dengan Tiongkok mulai 30 April 2026. 🇨🇳",
-  "Fakta QRIS: uji coba Indonesia-Tiongkok sempat mencatat 1,64 juta transaksi senilai Rp556 miliar. 🧪",
-  "Fakta QRIS: BI sedang menyiapkannya untuk jemaah haji dan umrah agar bisa dipakai di Arab Saudi. 🕋",
-  "Fakta QRIS: ditargetkan bisa dipakai di negara-negara anggota APEC, diumumkan Februari 2026. 🌐",
-  "Fakta QRIS: Amerika Serikat pernah menyebutnya sebagai salah satu penghambat perdagangan bebas. 📄",
-  "Fakta QRIS: BI menargetkan 17 miliar transaksi dan 60 juta pengguna aktif pada 2026. 🎯"
+export const NEXT_LABELS = ["Lanjut", "Lanjut", "Lanjut", "Cari tempat"];
+
+export const LOADER_TEXTS = [
+  "Memilah tempat yang cocok dengan suasanamu.",
+  "Mengecek jarak dari lokasimu.",
+  "Menyesuaikan dengan budget.",
+  "QRIS diluncurkan Bank Indonesia pada 17 Agustus 2019.",
+  "Sejak 1 Januari 2020, semua penyelenggara pembayaran wajib memakai QRIS.",
+  "Satu kode QRIS bisa dibayar dari aplikasi apa saja: m-banking atau dompet digital.",
+  "Hampir selesai. Menyusun enam rekomendasi."
 ];
